@@ -8,5 +8,7 @@ public abstract class AI {
 		this.game = game;
 	}
 	public abstract void placeUnit();
-	public abstract void takeTurn();
+	public abstract void placeReinforcements();
+	public abstract void attackPhase();
+	public abstract void fortify();
 }
