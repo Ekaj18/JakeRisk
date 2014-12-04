@@ -17,7 +17,7 @@ public class makeDefaultMap {
 			else if(i < 13){
 				countries[i] = new Country(1);
 			}
-			else if(i < 17){
+			else if(i < 19){
 				countries[i] = new Country(2);
 			}
 			else if(i < 26){
@@ -85,6 +85,7 @@ public class makeDefaultMap {
 		bonusList.add(2);
 		
 		Map map  = new Map(countryList, bonusList);
+		System.out.println("Default map created.");
 		return map;	
 	}
 	

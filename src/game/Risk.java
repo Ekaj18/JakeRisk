@@ -21,9 +21,12 @@ public class Risk {
 		}
 		int curPlayer = 0;
 		while(temp.size() > 0){
-			map.getCountryList().get(temp.get((int) (Math.random()*temp.size()))).setPlayer(curPlayer%players);
+			int rand = (int) (Math.random()*temp.size());
+			map.getCountryList().get(temp.get(rand)).setPlayer(curPlayer%players);
+			temp.remove(rand);
 			curPlayer++;
 		}
+		System.out.println("Randomly generated starting countries.");
 	}
 	
 	public void placeReinforcements(ArrayList<Country> countryList,ArrayList<Integer> armies,int player){
@@ -35,10 +38,10 @@ public class Risk {
 			for(int i = 0; i < countryList.size(); i++){
 				countryList.get(i).addArmies(armies.get(i));
 			}
-			System.out.println(total + " armies added");
+			System.out.println(total + " reinforcements added.");
 		}
 		else{
-			System.out.println("Incorrect number of reinforcments.");
+			System.out.println("\nIncorrect Number of Reinforcments.");
 		}
 	}
 	
@@ -51,7 +54,7 @@ public class Risk {
 	}
 
 	public void attack(Country attack, Country defense, int attackingUnits){
-		if(map.isAdjacent(attack, defense) && attackingUnits < attack.getArmies()){
+		if(map.isAdjacent(attack, defense) && attackingUnits < attack.getArmies() && attackingUnits > 0){
 			int attDice = attackingUnits;
 			if(attDice >  3){
 				attDice = 3;
@@ -104,19 +107,25 @@ public class Risk {
 				}
 			}
 			if(defense.getArmies() <= 0){
-				System.out.println("Country taken by player " + attack.getPlayer());
+				System.out.println("\nCountry taken from player " + defense.getPlayer() + " by player " + attack.getPlayer());
 				defense.setPlayer(attack.getPlayer());
 				defense.setArmies(attackingUnits);
 				attack.destroyArmies(attackingUnits);
 			}
 		}
+		else{
+			System.out.println("\nInvalid Attack Command.");
+		}
 	}
 	
 	public void Fortify(Country first, Country second, int armies){
 		if(map.isConnected(first, second) && armies < first.getArmies()){
-			System.out.println(armies + " armies moved");
+			System.out.println("\n" + armies + " armies moved during fortification.");
 			first.destroyArmies(armies);
 			second.addArmies(armies);
+		}
+		else{
+			System.out.println("\nInvalid Fortification");
 		}
 	}
 	
@@ -130,7 +139,27 @@ public class Risk {
 		return countries;
 	}
 	
+	public int armiesOwned(int player){
+		int armies = 0;
+		for(int i = 0; i < map.getCountryList().size(); i++){
+			if(map.getCountryList().get(i).getPlayer() == player){
+				armies += map.getCountryList().get(i).getArmies();
+			}
+		}
+		return armies;
+	}
+	
 	public boolean isWinner(int player){
 		return map.controlsAll(player);
+	}
+	
+	public void placeUnit(Country country){
+			country.addArmies(1);
+	}
+	
+	public void currentControl(){
+		for(int i = 0; i < map.getCountryList().size(); i++){
+			System.out.println("Country " + (i+1) +  " is controlled by player " + map.getCountryList().get(i).getPlayer() + " and has " + map.getCountryList().get(i).getArmies() + " armies.");
+		}
 	}
 }
